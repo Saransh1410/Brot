@@ -1,0 +1,125 @@
+{
+  "users": [
+    {
+      "id": "d0f073a9-58d5-4a6f-ab20-f6dd660cbb75",
+      "name": "Saransh Devpura",
+      "email": "saranshdevpura00@gmail.com",
+      "password": "039b21d2df840be3071a6b3b1329af085046c59d03f9d04d6e4e4bd926d4b308",
+      "streak": 0,
+      "lastActive": "Wed Mar 18 2026",
+      "createdAt": "2026-03-18T09:54:13.031Z"
+    },
+    {
+      "id": "67ae723a-ec39-4a6f-8a4b-8706dcf15f43",
+      "name": "Kasak",
+      "email": "kasaktolani724@gmail.com",
+      "password": "a6c1884541e100fdd3c024b2d2a405b1f1ad83063eb3f5987d5d5566ff576142",
+      "streak": 0,
+      "lastActive": "Fri Mar 20 2026",
+      "createdAt": "2026-03-20T17:28:03.696Z"
+    }
+  ],
+  "habits": [
+    {
+      "id": "37520870-9de0-46fb-99b3-07ffd99b962e",
+      "userId": "d0f073a9-58d5-4a6f-ab20-f6dd660cbb75",
+      "name": "Web dev",
+      "category": "mind",
+      "icon": "⚡",
+      "targetDays": 75,
+      "streak": 1,
+      "longestStreak": 1,
+      "completions": [
+        "Wed Mar 18 2026"
+      ],
+      "createdAt": "2026-03-18T09:54:52.178Z"
+    },
+    {
+      "id": "e4c80274-d43f-4718-a8ca-db9d7a8468e2",
+      "userId": "d0f073a9-58d5-4a6f-ab20-f6dd660cbb75",
+      "name": "Sleeping",
+      "category": "health",
+      "icon": "🌙",
+      "targetDays": 30,
+      "streak": 1,
+      "longestStreak": 1,
+      "completions": [
+        "Wed Mar 18 2026"
+      ],
+      "createdAt": "2026-03-18T09:55:15.673Z"
+    },
+    {
+      "id": "eba89ade-e96d-4823-ad0b-afbd7e11c15d",
+      "userId": "d0f073a9-58d5-4a6f-ab20-f6dd660cbb75",
+      "name": "Project manager",
+      "category": "mind",
+      "icon": "💼",
+      "targetDays": 30,
+      "streak": 1,
+      "longestStreak": 1,
+      "completions": [
+        "Wed Mar 18 2026"
+      ],
+      "createdAt": "2026-03-18T09:55:33.887Z"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "a6027b2b-9034-4340-8b18-c089b6d68344",
+      "userId": "d0f073a9-58d5-4a6f-ab20-f6dd660cbb75",
+      "title": "Create project",
+      "priority": "high",
+      "dueDate": "2026-03-18",
+      "dueTime": null,
+      "notes": "",
+      "done": true,
+      "createdAt": "2026-03-18T09:55:53.367Z",
+      "completedAt": "2026-03-18T10:10:22.350Z"
+    },
+    {
+      "id": "8c149ef8-0cfb-44c0-96fa-42c940f0f188",
+      "userId": "d0f073a9-58d5-4a6f-ab20-f6dd660cbb75",
+      "title": "Submit project",
+      "priority": "high",
+      "dueDate": "2026-03-18",
+      "dueTime": null,
+      "notes": "",
+      "done": true,
+      "createdAt": "2026-03-18T09:56:11.304Z",
+      "completedAt": "2026-03-18T10:10:21.273Z"
+    },
+    {
+      "id": "afdbecc3-1401-41a0-9544-b1d3ee30ca14",
+      "userId": "d0f073a9-58d5-4a6f-ab20-f6dd660cbb75",
+      "title": "AI file",
+      "priority": "medium",
+      "dueDate": null,
+      "dueTime": null,
+      "notes": "",
+      "done": true,
+      "createdAt": "2026-03-18T09:56:22.539Z",
+      "completedAt": "2026-03-18T10:04:41.057Z"
+    },
+    {
+      "id": "1e0f0f87-c7a9-4723-9d3c-3dc7c005cd0c",
+      "userId": "d0f073a9-58d5-4a6f-ab20-f6dd660cbb75",
+      "title": "Lab",
+      "priority": "low",
+      "dueDate": null,
+      "dueTime": null,
+      "notes": "",
+      "done": true,
+      "createdAt": "2026-03-18T09:57:04.822Z",
+      "completedAt": "2026-03-18T09:58:21.679Z"
+    }
+  ],
+  "sessions": [
+    {
+      "id": "a78fcd86-e4f7-496e-a0dd-a8a1edda221e",
+      "userId": "d0f073a9-58d5-4a6f-ab20-f6dd660cbb75",
+      "duration": 25,
+      "type": "pomodoro",
+      "completedAt": "2026-03-18T10:51:24.359Z"
+    }
+  ]
+}
