@@ -5,18 +5,9 @@
       "name": "Saransh Devpura",
       "email": "saranshdevpura00@gmail.com",
       "password": "039b21d2df840be3071a6b3b1329af085046c59d03f9d04d6e4e4bd926d4b308",
-      "streak": 0,
-      "lastActive": "Wed Mar 18 2026",
+      "streak": 1,
+      "lastActive": "Sat Mar 21 2026",
       "createdAt": "2026-03-18T09:54:13.031Z"
-    },
-    {
-      "id": "67ae723a-ec39-4a6f-8a4b-8706dcf15f43",
-      "name": "Kasak",
-      "email": "kasaktolani724@gmail.com",
-      "password": "a6c1884541e100fdd3c024b2d2a405b1f1ad83063eb3f5987d5d5566ff576142",
-      "streak": 0,
-      "lastActive": "Fri Mar 20 2026",
-      "createdAt": "2026-03-20T17:28:03.696Z"
     }
   ],
   "habits": [
@@ -27,7 +18,7 @@
       "category": "mind",
       "icon": "⚡",
       "targetDays": 75,
-      "streak": 1,
+      "streak": 0,
       "longestStreak": 1,
       "completions": [
         "Wed Mar 18 2026"
@@ -44,7 +35,8 @@
       "streak": 1,
       "longestStreak": 1,
       "completions": [
-        "Wed Mar 18 2026"
+        "Wed Mar 18 2026",
+        "Sat Mar 21 2026"
       ],
       "createdAt": "2026-03-18T09:55:15.673Z"
     },
@@ -58,7 +50,8 @@
       "streak": 1,
       "longestStreak": 1,
       "completions": [
-        "Wed Mar 18 2026"
+        "Wed Mar 18 2026",
+        "Sat Mar 21 2026"
       ],
       "createdAt": "2026-03-18T09:55:33.887Z"
     }
