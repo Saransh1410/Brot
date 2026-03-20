@@ -300,14 +300,102 @@ input, select, textarea, button { font-family: inherit; }
 .toast.ok { background: #166534; } .toast.err { background: #991b1b; }
 @keyframes toastIn { from { opacity:0; transform: translateY(10px); } to { opacity:1; transform: none; } }
 
+/* ── Tablet ─────────────────────────────── */
+@media (max-width: 1024px) {
+  .sidebar { width: 180px; }
+  .stats-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+  .main { padding: 24px 20px; }
+  .mode-row { grid-template-columns: 1fr 1fr; }
+  .a-top { grid-template-columns: 1fr 1fr 1fr; }
+}
+
+/* ── Mobile ─────────────────────────────── */
 @media (max-width: 768px) {
-  .sidebar { position: fixed; bottom: 0; left: 0; right: 0; width: 100%; height: auto; flex-direction: row; border-right: none; border-top: 1px solid var(--border); padding: 8px 12px; z-index: 100; }
-  .brand, .nav-sec, .sidebar-foot, .nav-link span:not(.nav-icon):not(.nav-badge) { display: none; }
-  .main { padding: 16px; padding-bottom: 80px; }
-  .stats-grid { grid-template-columns: 1fr 1fr; }
-  .mode-row, .two-col, .a-top, .f-stats { grid-template-columns: 1fr 1fr; }
-  .chat-panel { width: calc(100vw - 32px); right: 16px; bottom: 80px; }
-  .chat-fab { bottom: 80px; }
+  /* sidebar becomes bottom nav */
+  .sidebar {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    width: 100%; height: 60px;
+    flex-direction: row; align-items: center; justify-content: space-around;
+    border-right: none; border-top: 1px solid var(--border);
+    padding: 0 8px; z-index: 100; overflow: visible;
+  }
+  .brand, .nav-sec, .sidebar-foot { display: none; }
+  .nav-link {
+    flex-direction: column; gap: 2px; padding: 8px 10px;
+    font-size: 10px; margin-bottom: 0; border-radius: 8px;
+    min-width: 48px; justify-content: center; align-items: center;
+  }
+  .nav-link span:not(.nav-icon):not(.nav-badge) { display: block; font-size: 10px; }
+  .nav-icon { font-size: 18px; width: auto; }
+  .nav-badge { position: absolute; top: 4px; right: 4px; font-size: 9px; padding: 1px 4px; }
+  .nav-link { position: relative; }
+
+  /* main content */
+  .main { padding: 16px 14px; padding-bottom: 72px; }
+  .page-title { font-size: 18px; }
+  .page-top { margin-bottom: 16px; }
+
+  /* stat cards - 2 col */
+  .stats-grid { grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+  .stat { padding: 14px; }
+  .stat-val { font-size: 22px; }
+  .stat-label { font-size: 11px; }
+  .stat-desc { font-size: 10px; }
+  .stat-icon { width: 26px; height: 26px; font-size: 13px; }
+
+  /* dashboard 2 cols become 1 col */
+  #page-dashboard .two-cols-dash { grid-template-columns: 1fr !important; }
+
+  /* grids */
+  .two-col { grid-template-columns: 1fr; }
+  .a-top { grid-template-columns: 1fr 1fr; }
+  .f-stats { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .f-stat { padding: 12px 8px; }
+  .f-stat-val { font-size: 20px; }
+  .f-stat-lbl { font-size: 10px; }
+
+  /* habits */
+  .habit-item { padding: 11px 12px; gap: 10px; }
+  .h-bar-wrap { display: none; }
+  .h-cat { display: none; }
+
+  /* tasks */
+  .task-item { padding: 11px 12px; gap: 10px; }
+
+  /* focus timer */
+  .focus-hero { padding: 28px 16px; }
+  .f-clock { font-size: 56px; letter-spacing: -2px; }
+  .mode-row { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .mode-card { padding: 10px 8px; font-size: 12px; }
+
+  /* analytics */
+  .heat-wrap { padding: 14px; }
+  .heat-grid { gap: 3px; }
+  .insight-card { margin-top: 0; }
+
+  /* auth screen */
+  .auth-box { padding: 28px 20px; }
+
+  /* chat */
+  .chat-panel { width: calc(100vw - 24px); right: 12px; bottom: 70px; height: 460px; }
+  .chat-fab { bottom: 70px; right: 16px; width: 46px; height: 46px; font-size: 18px; }
+
+  /* pills wrap better */
+  .pills { gap: 5px; }
+  .pill { padding: 4px 10px; font-size: 11px; }
+
+  /* page top button */
+  .btn-solid { padding: 7px 12px; font-size: 12px; }
+}
+
+/* ── Small mobile ───────────────────────── */
+@media (max-width: 380px) {
+  .stats-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .stat-val { font-size: 20px; }
+  .a-top { grid-template-columns: 1fr; }
+  .nav-link span:not(.nav-icon):not(.nav-badge) { display: none; }
+  .f-clock { font-size: 48px; }
+  .main { padding: 12px 10px; padding-bottom: 68px; }
 }
 </style>
 </head>
@@ -359,11 +447,11 @@ input, select, textarea, button { font-family: inherit; }
         <div class="page-top"><div><div class="page-title" id="dGreet">Good morning 👋</div><div class="page-sub" id="dDate"></div></div></div>
         <div class="stats-grid">
           <div class="stat"><div class="stat-top"><span class="stat-label">Today's Score</span><div class="stat-icon si-blue">⚡</div></div><div class="stat-val sv-blue" id="sScore">—</div><div class="stat-desc" id="sScoreD">out of 100</div></div>
-          <div class="stat"><div class="stat-top"><span class="stat-label">Streak</span><div class="stat-icon si-amber">🔥</div></div><div class="stat-val sv-amber" id="sStreak">—</div><div class="stat-desc">days in a row</div></div>
+          <div class="stat"><div class="stat-top"><span class="stat-label">Streak</span><div class="stat-icon si-amber">🔥</div></div><div class="stat-val sv-amber" id="sStreak">—</div><div class="stat-desc" id="sStreakD">days in a row</div></div>
           <div class="stat"><div class="stat-top"><span class="stat-label">Habits Done</span><div class="stat-icon si-green">🔁</div></div><div class="stat-val sv-green" id="sHabits">—</div><div class="stat-desc" id="sHabitsD">of 0 today</div></div>
           <div class="stat"><div class="stat-top"><span class="stat-label">Tasks Done</span><div class="stat-icon si-purple">✅</div></div><div class="stat-val sv-purple" id="sTasks">—</div><div class="stat-desc" id="sTasksD">due today</div></div>
         </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <div class="two-cols-dash" style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
           <div><div class="sec-header"><span class="sec-title">Today's Habits</span><button class="btn-ghost" onclick="goTo('habits')">View all</button></div><div class="card" id="dHabits"></div></div>
           <div><div class="sec-header"><span class="sec-title">Pending Tasks</span><button class="btn-ghost" onclick="goTo('tasks')">View all</button></div><div class="card" id="dTasks"></div></div>
         </div>
@@ -505,7 +593,8 @@ function showApp() {
   if (u) {
     document.getElementById('sAvatar').textContent = u.name[0].toUpperCase();
     document.getElementById('sName').textContent = u.name;
-    document.getElementById('sMeta').textContent = `${u.streak || 0}🔥 streak`;
+    const days = u.daysSinceJoined || 1;
+    document.getElementById('sMeta').textContent = `${u.streak || 0}🔥 of ${days} day${days !== 1 ? 's' : ''}`;
   }
   setHeader();
 }
@@ -576,6 +665,8 @@ function renderDash() {
   if (a) {
     document.getElementById('sScore').textContent = a.todayScore ?? '—';
     document.getElementById('sStreak').textContent = a.currentStreak ?? '—';
+    const totalDays = a.daysSinceJoined || 1;
+    document.getElementById('sStreakD').textContent = `out of ${totalDays} day${totalDays !== 1 ? 's' : ''}`;
     document.getElementById('sHabits').textContent = a.doneToday ?? '—';
     document.getElementById('sHabitsD').textContent = `of ${a.totalHabits} today`;
     // Tasks stat card — today's tasks only
@@ -709,7 +800,7 @@ function renderAnalytics() {
       <div class="a-lbl">Habit Completion</div>
       <div class="a-sub">${s.doneToday} of ${s.totalHabits} habits</div>
     </div>
-    <div class="a-card"><div class="a-val" style="color:var(--amber)">${s.currentStreak}</div><div class="a-lbl">Day Streak 🔥</div>${s.bestHabit ? `<div class="a-sub">Best: ${s.bestHabit.name} (${s.bestHabit.streak}d)</div>` : ''}</div>
+    <div class="a-card"><div class="a-val" style="color:var(--amber)">${s.currentStreak}</div><div class="a-lbl">Day Streak 🔥</div><div class="a-sub">${s.currentStreak} of ${s.daysSinceJoined || 1} days active</div>${s.bestHabit ? `<div class="a-sub" style="margin-top:2px">Best habit: ${s.bestHabit.name} (${s.bestHabit.streak}d)</div>` : ''}</div>
     <div class="a-card">
       <div class="a-val" style="color:var(--primary)">${s.todayScore}</div>
       <div class="a-lbl">Today's Score</div>

@@ -3,7 +3,7 @@ const fs = require("fs");
 const path = require("path");
 const crypto = require("crypto");
 
-const PORT = process.env.PORT || 3000;
+const PORT = 3000;
 const DB = path.join(__dirname, "db.json");
 const SECRET = "brot_2026_secret";
 
@@ -88,7 +88,7 @@ async function register(req, res) {
   db.users.push(user);
   saveDB(db);
   const token = makeToken(user.id);
-  send(res, 201, { token, user: { id: user.id, name: user.name, email: user.email, streak: user.streak } });
+  send(res, 201, { token, user: { id: user.id, name: user.name, email: user.email, streak: user.streak, daysSinceJoined: 1 } });
 }
 
 async function login(req, res) {
@@ -98,11 +98,36 @@ async function login(req, res) {
   if (!user) return send(res, 401, { error: "Invalid email or password" });
   const today = new Date().toDateString();
   const yesterday = new Date(Date.now() - 86400000).toDateString();
-  if (user.lastActive === yesterday) user.streak = (user.streak || 0) + 1;
-  else if (user.lastActive !== today) user.streak = 1;
+  // Calculate streak based on actual habit completions — not just logins
+  // Count consecutive days (going back from yesterday) where at least one habit was completed
+  const db2 = readDB();
+  const userHabits = db2.habits.filter(h => h.userId === user.id);
+
+  if (userHabits.length === 0) {
+    // No habits yet — streak based on consecutive login days
+    if (user.lastActive === yesterday) user.streak = (user.streak || 0) + 1;
+    else if (user.lastActive !== today) user.streak = 1;
+  } else {
+    // Count consecutive days where at least 1 habit was completed
+    let streak = 0;
+    for (let i = 1; i <= 365; i++) {
+      const d = new Date(Date.now() - i * 86400000).toDateString();
+      const completedOnDay = userHabits.some(h => h.completions?.includes(d));
+      if (completedOnDay) {
+        streak++;
+      } else {
+        break;
+      }
+    }
+    // Also count today if habits were completed today
+    const completedToday = userHabits.some(h => h.completions?.includes(today));
+    if (completedToday) streak++;
+    user.streak = streak;
+  }
   user.lastActive = today;
   saveDB(db);
-  send(res, 200, { token: makeToken(user.id), user: { id: user.id, name: user.name, email: user.email, streak: user.streak } });
+  const daysSinceJoined = Math.max(1, Math.ceil((Date.now() - new Date(user.createdAt).getTime()) / 86400000));
+  send(res, 200, { token: makeToken(user.id), user: { id: user.id, name: user.name, email: user.email, streak: user.streak, daysSinceJoined } });
 }
 
 function me(req, res) {
@@ -111,7 +136,8 @@ function me(req, res) {
   const db = readDB();
   const user = db.users.find(u => u.id === auth.userId);
   if (!user) return send(res, 404, { error: "User not found" });
-  send(res, 200, { user: { id: user.id, name: user.name, email: user.email, streak: user.streak } });
+  const daysJoined = Math.max(1, Math.ceil((Date.now() - new Date(user.createdAt).getTime()) / 86400000));
+  send(res, 200, { user: { id: user.id, name: user.name, email: user.email, streak: user.streak, daysSinceJoined: daysJoined } });
 }
 
 function getHabits(req, res) {
@@ -298,6 +324,7 @@ function getAnalytics(req, res) {
       otherTasksTotal: tasks.filter(t => !t.dueDate || t.dueDate !== todayISO).length,
       otherTasksDone: tasks.filter(t => (!t.dueDate || t.dueDate !== todayISO) && t.done).length,
       currentStreak: user?.streak || 0,
+      daysSinceJoined: Math.max(1, Math.ceil((Date.now() - new Date(user?.createdAt).getTime()) / 86400000)),
       bestHabit: topHabit ? { name: topHabit.name, streak: topHabit.streak } : null
     },
     weeklyData, heatmap
