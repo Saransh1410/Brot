@@ -108,7 +108,7 @@ input, select, textarea, button { font-family: inherit; }
 .logout-btn { background: none; border: none; color: var(--ink4); cursor: pointer; padding: 5px; border-radius: 6px; font-size: 15px; transition: color .15s; flex-shrink: 0; }
 .logout-btn:hover { color: var(--red); }
 .nav-logout { display: none; }
-.nav-logout:hover { color: var(--red) !important; }
+.nav-logout:hover { color: var(--red) !important; background: var(--red-l) !important; }
 
 .main { flex: 1; padding: 28px 32px; overflow-y: auto; min-width: 0; }
 .page { display: none; }
@@ -282,14 +282,18 @@ input, select, textarea, button { font-family: inherit; }
 .suggestion { padding: 7px 13px; background: var(--surface); color: var(--primary); border: 1.5px solid var(--primary-l); border-radius: 20px; font-size: 12px; font-weight: 500; cursor: pointer; transition: all .15s; white-space: nowrap; }
 .suggestion:hover { background: var(--primary); color: #fff; border-color: var(--primary); transform: translateY(-1px); }
 
-.overlay { position: fixed; inset: 0; background: rgba(0,0,0,.38); backdrop-filter: blur(3px); z-index: 900; display: flex; align-items: center; justify-content: center; padding: 24px; opacity: 0; pointer-events: none; transition: opacity .2s; }
+.overlay { position: fixed; inset: 0; background: rgba(0,0,0,.45); backdrop-filter: blur(4px); z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 16px; opacity: 0; pointer-events: none; transition: opacity .2s; }
 .overlay.open { opacity: 1; pointer-events: all; }
-.modal { background: var(--surface); border-radius: 16px; padding: 26px; width: 100%; max-width: 440px; box-shadow: var(--sh3); transform: scale(.97) translateY(8px); transition: transform .2s; }
+.modal { background: var(--surface); border-radius: 16px; padding: 26px; width: 100%; max-width: 440px; box-shadow: var(--sh3); transform: scale(.97) translateY(8px); transition: transform .25s; max-height: 90vh; overflow-y: auto; }
 .overlay.open .modal { transform: none; }
 @media (max-width: 768px) {
   .overlay { align-items: flex-end; padding: 0; }
-  .modal { border-radius: 20px 20px 0 0; max-width: 100%; padding: 24px 20px 32px; transform: translateY(100%); }
+  .modal { border-radius: 20px 20px 0 0; max-width: 100%; padding: 24px 20px 36px; transform: translateY(20px); max-height: 88vh; overflow-y: auto; }
   .overlay.open .modal { transform: none; }
+  .form-row { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .emoji-grid { gap: 6px; }
+  .em { width: 40px; height: 40px; font-size: 18px; }
+  .modal-foot { position: sticky; bottom: 0; background: var(--surface); padding-top: 12px; }
 }
 .modal-title { font-size: 18px; font-weight: 700; margin-bottom: 18px; letter-spacing: -.3px; }
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
@@ -310,6 +314,7 @@ input, select, textarea, button { font-family: inherit; }
 /* ── Tablet (769px - 1024px) ───────────── */
 @media (max-width: 1024px) {
   .sidebar { width: 180px; }
+  .nav-logout { display: flex !important; }
   .stats-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
   .main { padding: 24px 20px; }
   .mode-row { grid-template-columns: 1fr 1fr; }
@@ -337,7 +342,7 @@ input, select, textarea, button { font-family: inherit; }
     box-shadow: 0 -2px 12px rgba(0,0,0,0.06);
   }
   .brand, .nav-sec, .sidebar-foot { display: none; }
-  .nav-logout { display: flex !important; }
+  .nav-logout { display: flex !important; color: var(--ink3); }
 
   /* Nav items — icon + label stacked */
   .nav-link {
@@ -641,6 +646,60 @@ const S = {
   chatOpen: false
 };
 
+// ── Notification System ───────────────────────────────────────────────────
+// Asks for permission once, then reminds every 2 hours if habits/tasks pending
+
+function requestNotifPermission() {
+  if (!('Notification' in window)) return;
+  if (Notification.permission === 'default') {
+    Notification.requestPermission();
+  }
+}
+
+function sendNotif(title, body, icon) {
+  if (!('Notification' in window)) return;
+  if (Notification.permission !== 'granted') return;
+  try {
+    new Notification(title, { body, icon: '⚡', badge: '⚡' });
+  } catch(e) {}
+}
+
+function checkAndNotify() {
+  if (!Auth.isLoggedIn()) return;
+
+  const pendingHabits = S.habits.filter(h => !h.doneToday);
+  const pendingTasks  = S.tasks.filter(t => !t.done && t.dueDate === new Date().toISOString().split('T')[0]);
+  const hour = new Date().getHours();
+
+  // only notify between 8am and 10pm
+  if (hour < 8 || hour >= 22) return;
+
+  if (pendingHabits.length > 0 && pendingTasks.length > 0) {
+    sendNotif(
+      '⚡ Brot Reminder',
+      `You still have ${pendingHabits.length} habit(s) and ${pendingTasks.length} task(s) left today. Keep going!`
+    );
+  } else if (pendingHabits.length > 0) {
+    sendNotif(
+      '🔁 Habit Reminder',
+      `${pendingHabits.length} habit(s) not done yet: ${pendingHabits.slice(0,2).map(h=>h.name).join(', ')}${pendingHabits.length > 2 ? '...' : ''}`
+    );
+  } else if (pendingTasks.length > 0) {
+    sendNotif(
+      '✅ Task Reminder',
+      `${pendingTasks.length} task(s) due today still pending. Don't let them slip!`
+    );
+  }
+}
+
+function startNotifScheduler() {
+  requestNotifPermission();
+  // Check every 2 hours (7200000 ms)
+  setInterval(checkAndNotify, 2 * 60 * 60 * 1000);
+  // Also check once after 30 seconds to catch first session
+  setTimeout(checkAndNotify, 30 * 1000);
+}
+
 async function boot() {
   if (!Auth.isLoggedIn()) return showAuth();
   try { await AuthAPI.me(); showApp(); await loadAll(); }
@@ -652,6 +711,7 @@ function showAuth() {
   document.getElementById('app').style.display = 'none';
   // show guide bot on login screen
   document.getElementById('chatFab').style.display = 'flex';
+  startNotifScheduler();
   document.getElementById('chatFab').title = 'AI Mentor';
   document.getElementById('chatFabIcon').textContent = '🤖';
   document.getElementById('chatMsgs').innerHTML = '';
@@ -665,6 +725,7 @@ function showApp() {
   document.getElementById('authScreen').style.display = 'none';
   document.getElementById('app').style.display = 'block';
   document.getElementById('chatFab').style.display = 'flex';
+  
   document.getElementById('chatFab').title = 'AI Mentor';
   document.getElementById('chatFabIcon').textContent = '🤖';
   document.getElementById('chatMsgs').innerHTML = '';
@@ -889,7 +950,13 @@ function renderAnalytics() {
     </div>`;
   const mx = Math.max(...a.weeklyData.map(d => d.rate), 1);
   document.getElementById('aBars').innerHTML = a.weeklyData.map(d => `<div class="bar-wrap"><div class="bar-col" style="height:${(d.rate / mx) * 84}px" title="${d.label}: ${d.rate}%"></div><div class="bar-day">${d.label}</div></div>`).join('');
-  document.getElementById('aHeat').innerHTML = a.heatmap.map(d => {
+  // Align heatmap to start on Monday
+  const firstDate = new Date(a.heatmap[0].date);
+  // getDay(): 0=Sun,1=Mon,...6=Sat. We want Monday=0
+  const firstDow = firstDate.getDay();
+  const startPad = firstDow === 0 ? 6 : firstDow - 1; // days to pad before first cell
+  const emptyCells = Array(startPad).fill('<div class="h-cell h0" title=""></div>').join('');
+  const cells = a.heatmap.map(d => {
     const pct = d.pct || 0;
     const lv = pct === 0 ? 0 : pct <= 25 ? 1 : pct <= 50 ? 2 : pct <= 75 ? 3 : 4;
     const habitStr = `habits: ${d.habitsCount}/${d.habitsTotal}`;
@@ -897,6 +964,7 @@ function renderAnalytics() {
     const label = `${d.date} — ${habitStr}${taskStr} (${pct}%)`;
     return `<div class="h-cell h${lv}" title="${label}"></div>`;
   }).join('');
+  document.getElementById('aHeat').innerHTML = emptyCells + cells;
   document.getElementById('aInsights').innerHTML = genInsights(s, a.weeklyData).map(i => `<div class="insight ${i.t}"><div class="insight-title">${i.title}</div><div class="insight-body">${i.body}</div></div>`).join('');
 }
 
