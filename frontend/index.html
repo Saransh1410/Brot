@@ -596,7 +596,7 @@ input, select, textarea, button { font-family: inherit; }
         </div>
         <div class="heat-wrap">
           <div class="sec-title" style="margin-bottom:10px">28-Day Heatmap</div>
-          <div class="heat-days"><div class="heat-day">M</div><div class="heat-day">T</div><div class="heat-day">W</div><div class="heat-day">T</div><div class="heat-day">F</div><div class="heat-day">S</div><div class="heat-day">S</div></div>
+          <div class="heat-days" id="heatDayLabels"></div>
           <div class="heat-grid" id="aHeat"></div>
           <div style="display:flex;align-items:center;gap:5px;margin-top:10px">
             <span style="font-size:11px;color:var(--ink4)">Less</span>
@@ -950,12 +950,13 @@ function renderAnalytics() {
     </div>`;
   const mx = Math.max(...a.weeklyData.map(d => d.rate), 1);
   document.getElementById('aBars').innerHTML = a.weeklyData.map(d => `<div class="bar-wrap"><div class="bar-col" style="height:${(d.rate / mx) * 84}px" title="${d.label}: ${d.rate}%"></div><div class="bar-day">${d.label}</div></div>`).join('');
-  // Align heatmap to start on Monday
-  const firstDate = new Date(a.heatmap[0].date);
-  // getDay(): 0=Sun,1=Mon,...6=Sat. We want Monday=0
-  const firstDow = firstDate.getDay();
-  const startPad = firstDow === 0 ? 6 : firstDow - 1; // days to pad before first cell
-  const emptyCells = Array(startPad).fill('<div class="h-cell h0" title=""></div>').join('');
+  // Generate day labels based on actual first row dates
+  const dayNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const firstRowDays = a.heatmap.slice(0,7).map(d => dayNames[new Date(d.date).getDay()].charAt(0));
+  document.getElementById('heatDayLabels').innerHTML = firstRowDays.map(d => `<div class="heat-day">${d}</div>`).join('');
+
+  // Exactly 28 cells = 4 rows of 7, no padding needed
+  // Day labels (M T W T F S S) show week order, cells go left to right day by day
   const cells = a.heatmap.map(d => {
     const pct = d.pct || 0;
     const lv = pct === 0 ? 0 : pct <= 25 ? 1 : pct <= 50 ? 2 : pct <= 75 ? 3 : 4;
@@ -964,7 +965,7 @@ function renderAnalytics() {
     const label = `${d.date} — ${habitStr}${taskStr} (${pct}%)`;
     return `<div class="h-cell h${lv}" title="${label}"></div>`;
   }).join('');
-  document.getElementById('aHeat').innerHTML = emptyCells + cells;
+  document.getElementById('aHeat').innerHTML = cells;
   document.getElementById('aInsights').innerHTML = genInsights(s, a.weeklyData).map(i => `<div class="insight ${i.t}"><div class="insight-title">${i.title}</div><div class="insight-body">${i.body}</div></div>`).join('');
 }
 
