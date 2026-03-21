@@ -17,6 +17,15 @@
       "streak": 0,
       "lastActive": "Sat Mar 21 2026",
       "createdAt": "2026-03-21T15:27:28.628Z"
+    },
+    {
+      "id": "b0fa470e-db23-49a6-8f27-f3c238f08121",
+      "name": "abc",
+      "email": "saranshdevpura14@gmail.com",
+      "password": "a6c1884541e100fdd3c024b2d2a405b1f1ad83063eb3f5987d5d5566ff576142",
+      "streak": 0,
+      "lastActive": "Sat Mar 21 2026",
+      "createdAt": "2026-03-21T15:47:48.377Z"
     }
   ],
   "habits": [
@@ -63,6 +72,20 @@
         "Sat Mar 21 2026"
       ],
       "createdAt": "2026-03-18T09:55:33.887Z"
+    },
+    {
+      "id": "de5ff8e3-3cc1-4ff2-a22a-b036c1843d02",
+      "userId": "437ffb70-8f1d-4703-b8e8-5e7bec693274",
+      "name": "walking",
+      "category": "health",
+      "icon": "⚡",
+      "targetDays": 30,
+      "streak": 1,
+      "longestStreak": 1,
+      "completions": [
+        "Sat Mar 21 2026"
+      ],
+      "createdAt": "2026-03-21T15:48:40.556Z"
     }
   ],
   "tasks": [
@@ -125,6 +148,18 @@
       "done": false,
       "createdAt": "2026-03-21T15:22:02.398Z",
       "completedAt": null
+    },
+    {
+      "id": "cae3a31b-729e-4faa-bd37-bc8d5d7896b6",
+      "userId": "437ffb70-8f1d-4703-b8e8-5e7bec693274",
+      "title": "Study",
+      "priority": "medium",
+      "dueDate": null,
+      "dueTime": null,
+      "notes": "",
+      "done": true,
+      "createdAt": "2026-03-21T15:48:24.499Z",
+      "completedAt": "2026-03-21T15:48:26.582Z"
     }
   ],
   "sessions": [
