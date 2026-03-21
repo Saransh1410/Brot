@@ -8,6 +8,15 @@
       "streak": 1,
       "lastActive": "Sat Mar 21 2026",
       "createdAt": "2026-03-18T09:54:13.031Z"
+    },
+    {
+      "id": "437ffb70-8f1d-4703-b8e8-5e7bec693274",
+      "name": "Kasak",
+      "email": "kasaktolani724@gmail.com",
+      "password": "a6c1884541e100fdd3c024b2d2a405b1f1ad83063eb3f5987d5d5566ff576142",
+      "streak": 0,
+      "lastActive": "Sat Mar 21 2026",
+      "createdAt": "2026-03-21T15:27:28.628Z"
     }
   ],
   "habits": [
@@ -104,6 +113,18 @@
       "done": true,
       "createdAt": "2026-03-18T09:57:04.822Z",
       "completedAt": "2026-03-18T09:58:21.679Z"
+    },
+    {
+      "id": "10a05a0c-29b4-4057-ab31-90b887664f09",
+      "userId": "d0f073a9-58d5-4a6f-ab20-f6dd660cbb75",
+      "title": "Study",
+      "priority": "medium",
+      "dueDate": null,
+      "dueTime": null,
+      "notes": "",
+      "done": false,
+      "createdAt": "2026-03-21T15:22:02.398Z",
+      "completedAt": null
     }
   ],
   "sessions": [

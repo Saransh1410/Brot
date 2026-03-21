@@ -481,6 +481,40 @@ input, select, textarea, button { font-family: inherit; }
   .auth-box { padding: 24px 16px; }
   .focus-hero { padding: 24px 14px; }
 }
+/* MOBILE FIX: floating add button */
+.add-btn-mobile {
+  position: fixed;
+  bottom: 150px;   /* 🔥 increased from 90px */
+  right: 16px;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: white;
+  font-size: 26px;
+  border: none;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 20px rgba(37,99,235,0.4);
+  z-index: 999;
+}
+
+@media (max-width: 768px) {
+  .add-btn-mobile {
+    display: flex;
+  }
+
+  /* also fix header layout */
+  .page-top {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .page-top button {
+    width: 100%;
+  }
+}
 </style>
 </head>
 <body>
@@ -635,6 +669,7 @@ input, select, textarea, button { font-family: inherit; }
 <div class="overlay" id="overlay" onclick="closeOut(event)">
   <div class="modal"><div class="modal-title" id="mTitle"></div><div id="mBody"></div></div>
 </div>
+<button class="add-btn-mobile" id="mobileAddBtn">＋</button>
 <div id="toasts"></div>
 <script src="/js/api.js"></script>
 <script>
@@ -1366,7 +1401,40 @@ function toast(msg, type = '') {
   document.getElementById('toasts').appendChild(el);
   setTimeout(() => { el.style.transition = 'opacity .3s'; el.style.opacity = '0'; setTimeout(() => el.remove(), 300); }, 3000);
 }
+function setupMobileAddButton() {
+  const btn = document.getElementById("mobileAddBtn");
+  if (!btn) return;
 
+  function updateVisibility() {
+    const habitsPage = document.getElementById("page-habits");
+    const tasksPage = document.getElementById("page-tasks");
+
+    if (
+      habitsPage.classList.contains("active") ||
+      tasksPage.classList.contains("active")
+    ) {
+      btn.style.display = "flex";
+    } else {
+      btn.style.display = "none";
+    }
+  }
+
+  btn.onclick = () => {
+    if (document.getElementById("page-habits").classList.contains("active")) {
+      openHabitModal();
+    } else if (document.getElementById("page-tasks").classList.contains("active")) {
+      openTaskModal();
+    }
+  };
+
+  // Run initially
+  updateVisibility();
+
+  // Run every time page changes
+  setInterval(updateVisibility, 300);
+}
+
+setTimeout(setupMobileAddButton, 500);
 boot();
 </script>
 </body>
